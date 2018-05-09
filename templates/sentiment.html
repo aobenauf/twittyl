@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Sentiment Analysis</title>
+</head>
+<body>
+	This is the sentiment analysis page of {{ username }}
+</body>
+
+<br>
+<br>
+
+<h2>TWEETS</h2>
+{% for tweet in tweets %}
+
+{{tweet}}
+<br/>
+
+{% endfor %}
+
+<a href="{% url 'home'%}">Start Again</a>
+</html>

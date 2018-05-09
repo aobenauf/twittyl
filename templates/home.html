@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Home</title>
+</head>
+<body>
+	<h1>HOME PAGE</h1>
+	<br>
+	<br>
+
+<form action="{% url 'sentiment' %}">
+	<h3>Enter Twitter Handle:</h3>
+	<textarea name="twitter_handle" id="" cols="20" rows="1"></textarea>
+	<br>
+	<input type="submit" value='Go!'>
+
+</form>
+
+
+</body>
+</html>
