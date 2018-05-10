@@ -25,6 +25,7 @@ def sentiment(request):
 	####TWEETS#####
 
 	#SUDO UPDATE
+	a = 'balls'
 	tweet_list = []
 	timeline = api.user_timeline(screen_name = twitter_handle, count = 10, include_rts = False)
 	for tweet in timeline:
