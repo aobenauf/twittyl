@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Tweets</title>
+</head>
+<body>
+	These are the tweets and likes for {{ username }}
+</body>
+
+<form action="{% url 'analysis' %}">
+	<br>
+	<input type="submit" value='Analyze'>
+
+</form>
+
+<br>
+<br>
+
+<h3> 
+	Positive Tweets: {{ positives }}
+	Neutral Tweets: {{ neutrals }}
+	Negative Tweets: {{ negatives }}
+</h3>
+
+<h2>TWEETS</h2>
+{% for tweet in tweets %}
+
+{{tweet}}
+<br/>
+
+{% endfor %}
+
+<h2>LIKES</h2>
+{% for like in likes %}
+
+{{like}}
+
+
+{% endfor %}
+<br/>
+
+<a href="{% url 'home'%}">Start Again</a>
+</html>
