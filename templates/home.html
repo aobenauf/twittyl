@@ -3,19 +3,28 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Home</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+
+	<link rel="stylesheet" href="../static/styles/style.css">
+	
 </head>
 <body>
 	<h1>HOME PAGE</h1>
 	<br>
 	<br>
-
-<form action="{% url 'sentiment' %}">
-	<h3>Enter Twitter Handle:</h3>
-	<textarea name="twitter_handle" id="" cols="20" rows="1"></textarea>
 	<br>
-	<input type="submit" value='Go!'>
+	<p>helllo hello hello friend ;lkjsadf</p>
+<div class="jumbrotron">
+	<div class="container text-center">
+		<form action="{% url 'tweets' %}">
+		<h3>Enter Twitter Handle:</h3>
+		<textarea name="twitter_handle" id="" cols="20" rows="1"></textarea>
+		<br>
+		<input type="submit" value='Go!'>
+	</form>		
+	</div>
+</div>
 
-</form>
 
 
 </body>

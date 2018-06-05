@@ -17,8 +17,14 @@ from django.contrib import admin
 from django.urls import path
 from . import views
 
+from . import views, settings
+from django.contrib.staticfiles.urls import static
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+ 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
-    path('sentiment', views.sentiment, name='sentiment'),
+    path('tweets', views.tweets, name='tweets'),
+    path('analysis', views.analysis, name='analysis'),
 ]
