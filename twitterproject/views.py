@@ -1,5 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.http import JsonResponse
+
 from . import friend
 #for graphing
 from matplotlib import pylab
@@ -73,3 +75,10 @@ def analysis(request):
 
 #     # Send buffer in a http response the the browser with the mime type image/png set
 #     return HttpResponse(buffer.getvalue(), mimetype="image/png")	
+
+def get_data(requets, *args, **kwargs):
+	data = {
+		"sales": 100,
+		"customers": 10,
+	}
+	return JsonResponse(data)

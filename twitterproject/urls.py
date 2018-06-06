@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from . import views
+from .views import get_data
 
 from . import views, settings
 from django.contrib.staticfiles.urls import static
@@ -27,4 +28,5 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('tweets', views.tweets, name='tweets'),
     path('analysis', views.analysis, name='analysis'),
+    path('api/data',get_data, name='api-data'),
 ]
