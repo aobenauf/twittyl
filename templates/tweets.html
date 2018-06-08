@@ -3,9 +3,53 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Tweets</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+
 </head>
+
+<script>
+{% block jquery %}
+var endpoint = '/api/chart/data/'
+
+$.ajax({
+	method: "GET",
+	url: endpoint,
+	success: function(data){
+		console.log(data)
+		console.log(data.customers*3)
+	},
+	error: function(error_data){
+		console.log("error")
+		console.log(error_data)
+	}
+})
+
+window.onload = function() {
+  var ctx = document.getElementById("myChart");
+  var lineChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+      datasets: [{
+        label: "2015",
+        data: [10, 8, 6, 5, 12, 8, 16, 17, 6, 7, 6, 10]
+      }]
+    }
+  })
+}
+
+{% endblock %}
+</script>
+
+
 <body>
 	These are the tweets and likes for {{ username }}
+	<h4>Chart Start</h4>
+	<canvas id="myChart" width="400" height="400"></canvas>
+	<h4>Chart End</h4>
+
+
 </body>
 
 <form action="{% url 'analysis' %}">
