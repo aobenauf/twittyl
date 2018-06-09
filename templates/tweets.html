@@ -3,6 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Tweets</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">	
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
 
@@ -11,13 +12,27 @@
 <script>
 {% block jquery %}
 var endpoint = '/api/chart/data/'
-
+var defaultData = []
+var labels = []
 $.ajax({
 	method: "GET",
 	url: endpoint,
 	success: function(data){
-		console.log(data)
-		console.log(data.customers*3)
+		labels = data.labels
+		defaultData = data.default
+		console.log(data.labels)
+
+		var ctx = document.getElementById("myChart");
+		  var lineChart = new Chart(ctx, {
+		    type: 'line',
+		    data: {
+		      labels: labels,
+		      datasets: [{
+		        label: "Tweet Stock",
+		        data: defaultData
+		      }]
+		    }
+		  })
 	},
 	error: function(error_data){
 		console.log("error")
@@ -25,64 +40,82 @@ $.ajax({
 	}
 })
 
-window.onload = function() {
+/*window.onload = function() {
   var ctx = document.getElementById("myChart");
   var lineChart = new Chart(ctx, {
     type: 'line',
     data: {
-      labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+      labels: labels,
       datasets: [{
-        label: "2015",
-        data: [10, 8, 6, 5, 12, 8, 16, 17, 6, 7, 6, 10]
+        label: "Tweet Stock",
+        data: defaultData
       }]
     }
   })
-}
+}*/
 
 {% endblock %}
 </script>
 
 
 <body>
-	These are the tweets and likes for {{ username }}
-	<h4>Chart Start</h4>
-	<canvas id="myChart" width="400" height="400"></canvas>
-	<h4>Chart End</h4>
+	<div class="row">
+		<div class="col-sm-3">
+			Tweets for: {{ username }}
+		</div>
+		<div class="col-sm-3">
+			Positive Tweets: {{ positives }}
+		</div>
+		<div class="col-sm-3">
+			Neutral Tweets: {{ neutrals }}
+		</div>
+		<div class="col-sm-3">
+			Negative Tweets: {{ negatives }}
+		</div>
+	</div>
+
+	<br>
+	<br>
+	
+	<div class="row justify-content-center" >
+		<div class="col-lg-12">
+			<canvas id="myChart" height="75"></canvas>
+		</div>
+	</div>
 
 
 </body>
 
-<form action="{% url 'analysis' %}">
-	<br>
-	<input type="submit" value='Analyze'>
 
-</form>
+<div class="row">
+	<div class="col-lg-6">
+		<h2>TWEETS</h2>
+		{% for tweet in tweets %}
 
-<br>
-<br>
+		{{tweet}}
+		<br/>
 
-<h3> 
-	Positive Tweets: {{ positives }}
-	Neutral Tweets: {{ neutrals }}
-	Negative Tweets: {{ negatives }}
-</h3>
-
-<h2>TWEETS</h2>
-{% for tweet in tweets %}
-
-{{tweet}}
-<br/>
-
-{% endfor %}
-
-<h2>LIKES</h2>
-{% for like in likes %}
-
-{{like}}
+		{% endfor %}
+	</div>
 
 
-{% endfor %}
-<br/>
+	<div class="col-lg-6">
+		<h2>LIKES</h2>
+		{% for like in likes %}
+
+		{{like}}
+
+
+		{% endfor %}
+		<br/>		
+		
+	</div>
+
+
+
+
+
+</div>
 
 <a href="{% url 'home'%}">Start Again</a>
 </html>

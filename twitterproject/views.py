@@ -1,16 +1,11 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.http import JsonResponse
-
 from . import friend
-#for graphing
-from matplotlib import pylab
-from pylab import *
-import PIL, PIL.Image, io
-
-
 from rest_framework.views import APIView
 from rest_framework.response import Response
+
+buddy_name = ""
 
 def home(request):
 	return render(request, 'home.html')
@@ -21,10 +16,8 @@ def tweets(request):
 	#get the handle from the input field
 	person = friend.Friend(request.GET['twitter_handle'])
 
-
 	pos_sent, neg_sent, nut_sent, tweets, likes = person.getSentiments()
-
-
+	buddy_name = person
 
 	return render(request, 'tweets.html',{'username':person.twitter_handle,'tweets': tweets, 'likes': likes, 'positives': pos_sent,'negatives': neg_sent, 'neutrals': nut_sent})
 
@@ -46,13 +39,20 @@ def get_data(requets, *args, **kwargs):
 	return JsonResponse(data)
 
 class ChartData(APIView):
+	
 
 	authentication_classes = []
 	permission_classes = []
 
 	def get(self, request, format=None):
+		buddy = friend.Friend(buddy_name)
+		#person = friend.Friend(request.GET['twitter_handle'])
+		dates, tweet_stock_data = buddy.getSentimentStock()
+		print(len(dates),len(tweet_stock_data))
+		labels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+		defaultData = [10, 8, 6, 5, 12, 8, 16, 17, 6, 7, 6, 10]
 		data = {
-			"sales": 100,
-			"customers": 10,
-		}		
+			"labels": dates,
+			"default": tweet_stock_data,
+		}
 		return Response(data)
