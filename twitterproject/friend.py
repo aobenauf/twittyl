@@ -211,11 +211,12 @@ class Friend:
 		sentiment_df['tweet_stock'] = sentiment_df.tweet_sentiment.cumsum()
 		sentiment_df['like_stock'] = sentiment_df.like_sentiment.cumsum()
 		sentiment_df['sentiment_stock'] = sentiment_df.daily_sentiment.cumsum()
-		sentiment_df['SS_MA'] = sentiment_df['sentiment_stock'].rolling(window=10).mean()
-		sentiment_df['tweet_ma'] = sentiment_df['tweet_stock'].rolling(window=10).mean()
-		sentiment_df['like_ma'] = sentiment_df['like_stock'].rolling(window=10).mean()
+		#sentiment_df['SS_MA'] = sentiment_df['sentiment_stock'].rolling(window=10).mean()
+		sentiment_df['tweet_ma'] = sentiment_df['tweet_stock'].rolling(window=10).mean().fillna(0)
+		#sentiment_df['like_ma'] = sentiment_df['like_stock'].rolling(window=10).mean()
 
 		self.dates = sentiment_df['date'].tolist()
 		self.tweet_stock = sentiment_df['tweet_stock'].tolist()
+		self.tweet_ma = sentiment_df['tweet_ma'].tolist()
 
-		return self.dates, self.tweet_stock
+		return self.dates, self.tweet_stock, self.tweet_ma

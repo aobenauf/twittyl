@@ -12,47 +12,44 @@
 <script>
 {% block jquery %}
 var endpoint = '/api/chart/data/'
-var defaultData = []
 var labels = []
+var tweet_stock = []
+var tweet_ma = []
 $.ajax({
 	method: "GET",
 	url: endpoint,
 	success: function(data){
 		labels = data.labels
-		defaultData = data.default
+		tweet_stock = data.tweet_stock
+		tweet_ma = data.tweet_ma
 		console.log(data.labels)
 
 		var ctx = document.getElementById("myChart");
+
 		  var lineChart = new Chart(ctx, {
 		    type: 'line',
-		    data: {
-		      labels: labels,
-		      datasets: [{
-		        label: "Tweet Stock",
-		        data: defaultData
-		      }]
-		    }
-		  })
-	},
+			data: {
+				labels: labels,
+				datasets: [{
+					label: "Tweet Stock",
+					data: tweet_stock,
+					fill: false,
+				}, {
+					label: 'My Second dataset',
+					data: tweet_ma,
+					fill: false,
+				}]
+			}
+		})
+	},		    
+
 	error: function(error_data){
 		console.log("error")
 		console.log(error_data)
 	}
 })
 
-/*window.onload = function() {
-  var ctx = document.getElementById("myChart");
-  var lineChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: labels,
-      datasets: [{
-        label: "Tweet Stock",
-        data: defaultData
-      }]
-    }
-  })
-}*/
+
 
 {% endblock %}
 </script>

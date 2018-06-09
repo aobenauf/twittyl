@@ -46,13 +46,13 @@ class ChartData(APIView):
 
 	def get(self, request, format=None):
 		buddy = friend.Friend(buddy_name)
-		#person = friend.Friend(request.GET['twitter_handle'])
-		dates, tweet_stock_data = buddy.getSentimentStock()
-		print(len(dates),len(tweet_stock_data))
+		dates, tweet_stock_data, tweet_ma_data = buddy.getSentimentStock()
+		print(len(dates),len(tweet_stock_data),len(tweet_ma_data))
 		labels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 		defaultData = [10, 8, 6, 5, 12, 8, 16, 17, 6, 7, 6, 10]
 		data = {
 			"labels": dates,
-			"default": tweet_stock_data,
+			"tweet_stock": tweet_stock_data,
+			"tweet_ma": tweet_ma_data,
 		}
 		return Response(data)
