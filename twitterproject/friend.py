@@ -5,10 +5,6 @@ from datetime import datetime as dt
 import config
 
 
-
-
-
-
 consumer_key = config.consumer_key
 consumer_secret = config.consumer_secret
 access_token = config.access_token
@@ -79,6 +75,12 @@ class Friend:
 		return self.pos_sent, self.neg_sent, self.nut_sent, self.tweets, self.likes
 
 	def getSentimentStock(self):
+
+		self.dates = []
+		self.tweet_stock = []
+		self.tweet_ma = []
+		self.daily_tweet_sentiment = []
+		self.daily_like_sentiment = []
 
 		timeline = api.user_timeline(screen_name = self.twitter_handle, count = 100, include_rts = True)
 
@@ -204,10 +206,10 @@ class Friend:
 		sentiment_df['like_sentiment'] = sentiment_df['like_sentiment'].fillna(0)
 		sentiment_df['daily_sentiment'] = sentiment_df['like_sentiment'] + sentiment_df['tweet_sentiment']
 		sentiment_df['date'] =pd.to_datetime(sentiment_df.date)
-		sentiment_df['date'] = sentiment_df['date'].dt.strftime('%m/%d/%y')
 		sentiment_df = sentiment_df.sort_values(by=['date'])
 		sentiment_df['MA'] = sentiment_df['daily_sentiment'].rolling(window=5).mean()
 		sentiment_df = sentiment_df.sort_values(by=['date'])
+		sentiment_df['date'] = sentiment_df['date'].dt.strftime('%m/%d/%y')
 		#calculating sentiment stock (how sentiment is trending over time)
 		sentiment_df['tweet_stock'] = sentiment_df.tweet_sentiment.cumsum()
 		sentiment_df['like_stock'] = sentiment_df.like_sentiment.cumsum()
@@ -219,5 +221,7 @@ class Friend:
 		self.dates = sentiment_df['date'].tolist()
 		self.tweet_stock = sentiment_df['tweet_stock'].tolist()
 		self.tweet_ma = sentiment_df['tweet_ma'].tolist()
+		self.daily_tweet_sentiment = sentiment_df['tweet_sentiment']
+		self.daily_like_sentiment = sentiment_df['like_sentiment']
 
-		return self.dates, self.tweet_stock, self.tweet_ma
+		return self.dates, self.tweet_stock, self.tweet_ma, self.daily_tweet_sentiment, self.daily_like_sentiment

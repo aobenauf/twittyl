@@ -16,7 +16,6 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from . import views
-from .views import get_data
 #from twitterproject.views import ChartData
 
 from . import views, settings
@@ -30,5 +29,4 @@ urlpatterns = [
     path('tweets', views.tweets, name='tweets'),
     path('analysis', views.analysis, name='analysis'),
     path('api/chart/data/', views.ChartData.as_view()),
-    path('api/data/',get_data, name='api-data'),
 ]

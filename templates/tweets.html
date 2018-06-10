@@ -15,6 +15,8 @@ var endpoint = '/api/chart/data/'
 var labels = []
 var tweet_stock = []
 var tweet_ma = []
+var daily_tweet_sentiment = []
+var daily_like_sentiment = []
 $.ajax({
 	method: "GET",
 	url: endpoint,
@@ -22,21 +24,26 @@ $.ajax({
 		labels = data.labels
 		tweet_stock = data.tweet_stock
 		tweet_ma = data.tweet_ma
-		console.log(data.labels)
+		daily_tweet_sentiment = data.daily_tweet_sentiment
+		daily_like_sentiment = data.daily_like_sentiment
+		//console.log(data.labels)
 
 		var ctx = document.getElementById("myChart");
 
 		  var lineChart = new Chart(ctx, {
 			type: 'line',
+			markerType: "none",	
 			data: {
 				labels: labels,
 				datasets: [{
 					label: "Tweet Stock",
+					markerType: "none",
 					data: tweet_stock,
 					borderColor: "#3e95cd",
 					fill: false,
 				}, {
 					label: 'Tweet 10-Day MA',
+					markerType: "none",	
 					data: tweet_ma,
 					borderColor: "#8e5ea2",
 					fill: false,
@@ -52,7 +59,39 @@ $.ajax({
 				}
 			}
 		})
+		// chart 2
+		var ctx2 = document.getElementById("myChart2");
+
+		  var lineChart2 = new Chart(ctx2, {
+			type: 'line',
+        	markerType: "none",
+			data: {
+				labels: labels,
+				datasets: [{
+					label: "Tweets",
+					data: daily_tweet_sentiment,
+					borderColor: "#ff4e00",
+					fill: false,
+				}, {
+					label: 'Likes',
+					data: daily_like_sentiment,
+					borderColor: "#3be8b0",
+					fill: false,
+				}]
+			},
+			options: {
+				scales: {
+					xAxes: [{
+						time: {
+							unit: 'month'
+						}
+					}]
+				}
+			}
+		})
 	},		    
+
+
 
 	error: function(error_data){
 		console.log("error")
@@ -88,6 +127,7 @@ $.ajax({
 	<div class="row justify-content-center" >
 		<div class="col-lg-12">
 			<canvas id="myChart" height="75"></canvas>
+			<canvas id="myChart2" height="50"></canvas>
 		</div>
 	</div>
 
