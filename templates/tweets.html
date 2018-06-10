@@ -27,18 +27,29 @@ $.ajax({
 		var ctx = document.getElementById("myChart");
 
 		  var lineChart = new Chart(ctx, {
-		    type: 'line',
+			type: 'line',
 			data: {
 				labels: labels,
 				datasets: [{
 					label: "Tweet Stock",
 					data: tweet_stock,
+					borderColor: "#3e95cd",
 					fill: false,
 				}, {
-					label: 'My Second dataset',
+					label: 'Tweet 10-Day MA',
 					data: tweet_ma,
+					borderColor: "#8e5ea2",
 					fill: false,
 				}]
+			},
+			options: {
+				scales: {
+					xAxes: [{
+						time: {
+							unit: 'month'
+						}
+					}]
+				}
 			}
 		})
 	},		    

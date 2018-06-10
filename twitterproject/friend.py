@@ -204,6 +204,7 @@ class Friend:
 		sentiment_df['like_sentiment'] = sentiment_df['like_sentiment'].fillna(0)
 		sentiment_df['daily_sentiment'] = sentiment_df['like_sentiment'] + sentiment_df['tweet_sentiment']
 		sentiment_df['date'] =pd.to_datetime(sentiment_df.date)
+		sentiment_df['date'] = sentiment_df['date'].dt.strftime('%m/%d/%y')
 		sentiment_df = sentiment_df.sort_values(by=['date'])
 		sentiment_df['MA'] = sentiment_df['daily_sentiment'].rolling(window=5).mean()
 		sentiment_df = sentiment_df.sort_values(by=['date'])
