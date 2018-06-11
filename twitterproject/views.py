@@ -5,7 +5,8 @@ from . import friend
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-buddy_name = ""
+#initialize a friend with no twitter handle at first
+person = friend.Friend("")
 
 def home(request):
 	#refresh the user and data?
@@ -13,13 +14,12 @@ def home(request):
 
 
 def tweets(request):
- 
-	#get the handle from the input field
-	person = friend.Friend(request.GET['twitter_handle'])
-
+	#get the handle from the input field, assign it to the class to use in APIview
+	person.twitter_handle = request.GET['twitter_handle']
+	
 	pos_sent, neg_sent, nut_sent, tweets, likes = person.getSentiments()
 	buddy_name = person
-	print(buddy_name.twitter_handle)
+	#print(buddy_name.twitter_handle)
 
 	return render(request, 'tweets.html',{'username':person.twitter_handle,'tweets': tweets, 'likes': likes, 'positives': pos_sent,'negatives': neg_sent, 'neutrals': nut_sent})
 
@@ -36,9 +36,10 @@ class ChartData(APIView):
 
 
 	def get(self, request, format=None):
-		buddy = friend.Friend(buddy_name)
-		print("Buddy's Handle: ")
+		#pulling twitter handle that was pulled in "tweets" pull request and stored in the Friend class init 'person'
+		buddy = friend.Friend(person.twitter_handle)
 		dates, tweet_stock_data, tweet_ma_data, daily_tweet_sentiment, daily_like_sentiment = buddy.getSentimentStock()
+		print(buddy)
 		#print(len(dates),len(tweet_stock_data),len(tweet_ma_data))
 		data = {
 			"labels": dates,
