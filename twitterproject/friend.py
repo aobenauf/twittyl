@@ -30,7 +30,14 @@ class Friend:
 				#exclude tweets from the latest 10 tweets part
 				pass
 			else:
-				tweet_dict[tweet.text] = round(TextBlob(tweet.text).sentiment.polarity,2)
+				#{tweet.text: [tweet sentiment, retweets, favorites, name, twitter handle, profile image] }
+				tweet_dict[tweet.text] = []
+				tweet_dict[tweet.text].append(round(TextBlob(tweet.text).sentiment.polarity,2))
+				tweet_dict[tweet.text].append(tweet.retweet_count)
+				tweet_dict[tweet.text].append(tweet.favorite_count)
+				tweet_dict[tweet.text].append(tweet.user.name) 
+				tweet_dict[tweet.text].append(tweet.user.screen_name)
+				tweet_dict[tweet.text].append(tweet.user.profile_image_url_https) 
 
 
 		#only return latest 10 tweets
