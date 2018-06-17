@@ -23,20 +23,26 @@ class Friend:
 		self.twitter_handle = twitter_handle
 
 	def getTweets(self):
-		tweet_list = []
-		timeline = api.user_timeline(screen_name = self.twitter_handle, count = 10, include_rts = False)
+		tweet_dict = {}
+		timeline = api.user_timeline(screen_name = self.twitter_handle, count = 25, include_rts = False)
 		for tweet in timeline:
-			tweet_list.append(tweet.text)
+			if tweet.text[0] == "@":
+				#exclude tweets from the latest 10 tweets part
+				pass
+			else:
+				tweet_dict[tweet.text] = round(TextBlob(tweet.text).sentiment.polarity,2)
+
 
 		#only return latest 10 tweets
 		#tweet_list_trim = tweet_list[:10]
 
-		return tweet_list
+		return tweet_dict
 
 
 	def getLikes(self):
 
 		likes_list = []
+		likes_dict = {}
 		#for i in range(1,1):
 		likes_per_page = api.favorites(self.twitter_handle,page=1)
 		#pages_of_likes.append(likes_per_page)
@@ -45,7 +51,10 @@ class Friend:
 
 		likes_list_trim = likes_list[:10]
 
-		return likes_list_trim
+		for like in likes_list_trim:
+			likes_dict[like] = round(TextBlob(like).sentiment.polarity,2)
+
+		return likes_dict
 
 
 	def getSentiments(self):
