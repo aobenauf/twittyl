@@ -140,7 +140,9 @@ $.ajax({
 		<h2>TWEETS</h2>
 		{% for tweet in tweets %}
 
-		{{tweet}}
+		<div class="col-sm-12">
+			{{ tweet }}
+		</div>
 		<br/>
 
 		{% endfor %}

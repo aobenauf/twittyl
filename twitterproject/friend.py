@@ -16,6 +16,7 @@ api = tweepy.API(auth)
 # Creating a class for the data to be housed
 class Friend:
 
+	twitter_handle = ""
 
 
 	def __init__(self, twitter_handle):
@@ -34,6 +35,7 @@ class Friend:
 
 
 	def getLikes(self):
+
 		likes_list = []
 		#for i in range(1,1):
 		likes_per_page = api.favorites(self.twitter_handle,page=1)
