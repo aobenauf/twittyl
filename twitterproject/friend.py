@@ -53,13 +53,20 @@ class Friend:
 		#for i in range(1,1):
 		likes_per_page = api.favorites(self.twitter_handle,page=1)
 		#pages_of_likes.append(likes_per_page)
+		# for like in likes_per_page:
+		# 	likes_list.append(like.text)
+
+		# likes_list_trim = likes_list[:10]
+
 		for like in likes_per_page:
-			likes_list.append(like.text)
-
-		likes_list_trim = likes_list[:10]
-
-		for like in likes_list_trim:
-			likes_dict[like] = round(TextBlob(like).sentiment.polarity,2)
+			#{like.text: [like sentiment, retweets, favorites, name, twitter handle, profile image] }
+			likes_dict[like.text] = []
+			likes_dict[like.text].append(round(TextBlob(like.text).sentiment.polarity,2))
+			likes_dict[like.text].append(like.retweet_count)
+			likes_dict[like.text].append(like.favorite_count)
+			likes_dict[like.text].append(like.user.name) 
+			likes_dict[like.text].append(like.user.screen_name)
+			likes_dict[like.text].append(like.user.profile_image_url_https) 
 
 		return likes_dict
 
