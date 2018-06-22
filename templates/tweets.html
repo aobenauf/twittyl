@@ -153,24 +153,21 @@ $.ajax({
 			<div class="row">
 
 				<div class="col-sm-11">
-					<div class="row">
-						<h6>{{ value.3 }}</h6>
-						<p>@{{ value.4 }}</p>
-					</div>
 
+					<h6>{{ value.3 }} @{{ value.4 }}</h6>
 
 				<div class="row">
 					<div class="col-sm-1">
 						<img src={{ value.5 }} alt="">
 					</div> 
 					<div class="col-sm-10">
-						<h6>{{key}}</h6>
+						<p>{{key}}</p>
 					</div>
 				</div>
 					<div class="row">
-						<p>Retweets: {{ value.1 }} </p>
-						<br>
-						<p>Favorites: {{ value.2 }}</p>
+						<div class="col-sm-6">
+							<h6>Retweets: {{ value.1 }}   Favorites: {{ value.2 }}</h6>
+						</div>
 					</div>
 				</div>
 				<div class="col-sm-1">
@@ -191,30 +188,29 @@ $.ajax({
 		<h2>LIKES</h2>
 		{% for key, value in likes.items %}
 
-		<div class="col-sm-12" id="tweet" style="border: 1px solid black">
+		<div class="col-sm-12 col-sm-offset-4" id="tweet" style="border: 1px solid black">
 			<div class="row">
 
 				<div class="col-sm-11">
-					<div class="row">
-						<h6>{{ value.3 }}</h6>
-						<p>@{{ value.4 }}</p>
-					</div>
+
+					<h6>{{ value.3 }} @{{ value.4 }}</h6>
+					
 
 
-				<div class="row">
-					<div class="col-sm-1">
-						<img src={{ value.5 }} alt="">
-					</div> 
-					<div class="col-sm-10">
-						<h6>{{key}}</h6>
-					</div>
-				</div>
 					<div class="row">
-						<p>Retweets: {{ value.1 }} </p>
-						<br>
-						<p>Favorites: {{ value.2 }}</p>
+						<div class="col-sm-1">
+							<img src={{ value.5 }} alt="">
+						</div> 
+						<div class="col-sm-10">
+							<h6>{{key}}</h6>
+						</div>
 					</div>
-				</div>
+						<div class="row">
+							<div class="col-sm-6">
+								<h6>Retweets: {{ value.1 }}   Favorites: {{ value.2 }}</h6>
+							</div>
+						</div>
+					</div>
 				<div class="col-sm-1">
 					<br>
 					<br>
@@ -228,10 +224,6 @@ $.ajax({
 		<br/>		
 		
 	</div>
-
-
-
-
 
 </div>
 
