@@ -106,15 +106,22 @@ class Friend:
 		self.tweet_ma = []
 		self.daily_tweet_sentiment = []
 		self.daily_like_sentiment = []
+		self.like_stock = []
+		self.like_ma = []
+		self.likes_dates = []
 
 		timeline = api.user_timeline(screen_name = self.twitter_handle, count = 100, include_rts = True)
 
 		#analysis on tweets liked
 		pages_of_likes = []
 		#collecting the first five pages which should be about 100 likes
-		for i in range(1,2):
+		for i in range(1,10):
 		    likes_per_page = api.favorites(self.twitter_handle,page=i)
 		    pages_of_likes.append(likes_per_page)
+
+		first_like = likes_per_page[0].created_at.strftime('%m/%d/%y')
+		print(first_like)
+		print("HFHFH")
 
 		tweets = {}
 		retweets = {}
@@ -241,12 +248,20 @@ class Friend:
 		sentiment_df['sentiment_stock'] = sentiment_df.daily_sentiment.cumsum()
 		#sentiment_df['SS_MA'] = sentiment_df['sentiment_stock'].rolling(window=10).mean()
 		sentiment_df['tweet_ma'] = sentiment_df['tweet_stock'].rolling(window=10).mean().fillna(0)
-		#sentiment_df['like_ma'] = sentiment_df['like_stock'].rolling(window=10).mean()
+		sentiment_df['like_ma'] = sentiment_df['like_stock'].rolling(window=10).mean().fillna(0)
 
 		self.dates = sentiment_df['date'].tolist()
 		self.tweet_stock = sentiment_df['tweet_stock'].tolist()
 		self.tweet_ma = sentiment_df['tweet_ma'].tolist()
-		self.daily_tweet_sentiment = sentiment_df['tweet_sentiment']
-		self.daily_like_sentiment = sentiment_df['like_sentiment']
+		self.daily_tweet_sentiment = sentiment_df['tweet_sentiment'].tolist()
+		self.daily_like_sentiment = sentiment_df['like_sentiment'].tolist()
+		self.like_stock = sentiment_df['like_stock'].tolist()[self.dates.index(first_like):]
+		self.like_ma = sentiment_df['like_ma'].tolist()[self.dates.index(first_like):]
+		#getting graph to scale correctly with the amount of data we have
+		#variable from pulling the likes above
+		self.likes_dates = self.dates[self.dates.index(first_like):]
+		print(len(self.likes_dates))
+		print(len(self.dates))
+		print(len(self.like_ma))
 
-		return self.dates, self.tweet_stock, self.tweet_ma, self.daily_tweet_sentiment, self.daily_like_sentiment
+		return self.dates, self.tweet_stock, self.tweet_ma, self.daily_tweet_sentiment, self.daily_like_sentiment, self.like_stock, self.like_ma, self.likes_dates

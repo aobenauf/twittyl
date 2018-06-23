@@ -38,8 +38,7 @@ class ChartData(APIView):
 	def get(self, request, format=None):
 		#pulling twitter handle that was pulled in "tweets" pull request and stored in the Friend class init 'person'
 		buddy = friend.Friend(person.twitter_handle)
-		dates, tweet_stock_data, tweet_ma_data, daily_tweet_sentiment, daily_like_sentiment = buddy.getSentimentStock()
-		print(buddy)
+		dates, tweet_stock_data, tweet_ma_data, daily_tweet_sentiment, daily_like_sentiment, like_stock, like_ma, likes_dates = buddy.getSentimentStock()
 		#print(len(dates),len(tweet_stock_data),len(tweet_ma_data))
 		data = {
 			"labels": dates,
@@ -47,6 +46,9 @@ class ChartData(APIView):
 			"tweet_ma": tweet_ma_data,
 			"daily_tweet_sentiment": daily_tweet_sentiment,
 			"daily_like_sentiment": daily_like_sentiment,
+			"like_stock": like_stock,
+			"like_ma": like_ma,
+			"likes_dates": likes_dates
 		}
-		
+		print(data["likes_dates"])
 		return Response(data)

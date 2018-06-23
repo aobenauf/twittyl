@@ -16,21 +16,27 @@
 {% block jquery %}
 var endpoint = '/api/chart/data/'
 var labels = []
+var likes_labels = []
 var tweet_stock = []
 var tweet_ma = []
 var daily_tweet_sentiment = []
 var daily_like_sentiment = []
+var like_stock = []
+var like_ma = []
 $.ajax({
 	method: "GET",
 	url: endpoint,
 	success: function(data){
 		labels = data.labels
+		likes_labels = data.likes_dates
 		tweet_stock = data.tweet_stock
 		tweet_ma = data.tweet_ma
 		daily_tweet_sentiment = data.daily_tweet_sentiment
 		daily_like_sentiment = data.daily_like_sentiment
-		//console.log(data.labels)
-
+		like_stock = data.like_stock
+		like_ma = data.like_ma
+		console.log(data.likes_labels)
+		//graph 1
 		var ctx = document.getElementById("myChart");
 
 		  var lineChart = new Chart(ctx, {
@@ -42,13 +48,13 @@ $.ajax({
 					label: "Tweet Stock",
 					markerType: "none",
 					data: tweet_stock,
-					borderColor: "#3e95cd",
+					borderColor: "#8e5ea2",
 					fill: false,
 				}, {
 					label: 'Tweet 10-Day MA',
 					markerType: "none",	
 					data: tweet_ma,
-					borderColor: "#8e5ea2",
+					borderColor: "#3e95cd",
 					fill: false,
 				}]
 			},
@@ -77,12 +83,12 @@ $.ajax({
 				datasets: [{
 					label: "Tweets",
 					data: daily_tweet_sentiment,
-					borderColor: "#ff4e00",
+					borderColor: "#8e5ea2",
 					fill: false,
 				}, {
 					label: 'Likes',
 					data: daily_like_sentiment,
-					borderColor: "#3be8b0",
+					borderColor: "#ff4e00",
 					fill: false,
 				}]
 			},
@@ -100,6 +106,42 @@ $.ajax({
 				}
 			}
 		})
+		//chart 3
+		var ctx3 = document.getElementById("myChart3");
+
+		  var lineChart = new Chart(ctx3, {
+			type: 'line',
+			markerType: "none",	
+			data: {
+				labels: likes_labels,
+				datasets: [{
+					label: "Like Stock",
+					markerType: "none",
+					data: like_stock,
+					borderColor: "#ff4e00",
+					fill: false,
+				}, {
+					label: 'Like 10-Day MA',
+					markerType: "none",	
+					data: like_ma,
+					borderColor: "#3e95cd",
+					fill: false,
+				}]
+			},
+			options: {
+				animation: false,
+				tooltips: {
+        			enabled: false
+    			},
+				scales: {
+					xAxes: [{
+						time: {
+							unit: 'month'
+						}
+					}]
+				}
+			}
+		})		  
 	},		    
 
 
@@ -135,98 +177,104 @@ $.ajax({
 	<br>
 	<br>
 	
-	<div class="row justify-content-center" >
+	<div class="row" >
+		<div class="col-lg-6">
+			<canvas id="myChart" height="150"></canvas>
+		</div>
+		<div class="col-lg-6">
+			<canvas id="myChart3" height="150"></canvas>
+		</div>
 		<div class="col-lg-12">
-			<canvas id="myChart" height="75"></canvas>
 			<canvas id="myChart2" height="50"></canvas>
 		</div>
 	</div>
 
 
+<div class="row justify-content-center" >
+	<div class="col-lg-10">
+		<div class="row">
+			<div class="col-sm-6">
+				<h2>TWEETS</h2>
+				{% for key, value in tweets.items %}
 
-<div class="row">
-	<div class="col-sm-6">
-		<h2>TWEETS</h2>
-		{% for key, value in tweets.items %}
-
-		<div class="col-sm-12" id="tweet" style="border: 1px solid black">
-			<div class="row">
-
-				<div class="col-sm-11">
-
-					<h6>{{ value.3 }} @{{ value.4 }}</h6>
-
-				<div class="row">
-					<div class="col-sm-1">
-						<img src={{ value.5 }} alt="">
-					</div> 
-					<div class="col-sm-10">
-						<p>{{key}}</p>
-					</div>
-				</div>
+				<div class="col-sm-12" id="tweet" style="border: 1px solid black">
 					<div class="row">
-						<div class="col-sm-6">
-							<h6>Retweets: {{ value.1 }}   Favorites: {{ value.2 }}</h6>
-						</div>
-					</div>
-				</div>
-				<div class="col-sm-1">
-					<br>
-					<br>
-					<h6>{{ value.0 }}</h6>
-				</div>
-			</div>
-		</div>
-		<br/>
 
-		{% endfor %}
+						<div class="col-sm-11">
 
-	</div>
+							<h6>{{ value.3 }} @{{ value.4 }}</h6>
 
-
-	<div class="col-lg-6">
-		<h2>LIKES</h2>
-		{% for key, value in likes.items %}
-
-		<div class="col-sm-12 col-sm-offset-4" id="tweet" style="border: 1px solid black">
-			<div class="row">
-
-				<div class="col-sm-11">
-
-					<h6>{{ value.3 }} @{{ value.4 }}</h6>
-					
-
-
-					<div class="row">
-						<div class="col-sm-1">
-							<img src={{ value.5 }} alt="">
-						</div> 
-						<div class="col-sm-10">
-							<h6>{{key}}</h6>
-						</div>
-					</div>
 						<div class="row">
-							<div class="col-sm-6">
-								<h6>Retweets: {{ value.1 }}   Favorites: {{ value.2 }}</h6>
+							<div class="col-sm-1">
+								<img src={{ value.5 }} alt="">
+							</div> 
+							<div class="col-sm-10">
+								<p>{{key}}</p>
 							</div>
 						</div>
+							<div class="row">
+								<div class="col-sm-6">
+									<h6>Retweets: {{ value.1 }}   Favorites: {{ value.2 }}</h6>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-1">
+							<br>
+							<br>
+							<h6>{{ value.0 }}</h6>
+						</div>
 					</div>
-				<div class="col-sm-1">
-					<br>
-					<br>
-					<h6>{{ value.0 }}</h6>
 				</div>
+				<br/>
+
+				{% endfor %}
+
+			</div>
+
+
+			<div class="col-lg-6">
+				<h2>LIKES</h2>
+				{% for key, value in likes.items %}
+
+				<div class="col-sm-12 col-sm-offset-4" id="tweet" style="border: 1px solid black">
+					<div class="row">
+
+						<div class="col-sm-11">
+
+							<h6>{{ value.3 }} @{{ value.4 }}</h6>
+							
+
+
+							<div class="row">
+								<div class="col-sm-1">
+									<img src={{ value.5 }} alt="">
+								</div> 
+								<div class="col-sm-10">
+									<h6>{{key}}</h6>
+								</div>
+							</div>
+								<div class="row">
+									<div class="col-sm-6">
+										<h6>Retweets: {{ value.1 }}   Favorites: {{ value.2 }}</h6>
+									</div>
+								</div>
+							</div>
+						<div class="col-sm-1">
+							<br>
+							<br>
+							<h6>{{ value.0 }}</h6>
+						</div>
+					</div>
+				</div>
+				<br/>
+
+				{% endfor %}
+				<br/>		
+				
 			</div>
 		</div>
-		<br/>
-
-		{% endfor %}
-		<br/>		
-		
 	</div>
-
 </div>
-
 </body>
 
 
