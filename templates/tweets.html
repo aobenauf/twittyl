@@ -64,6 +64,12 @@ $.ajax({
         			enabled: false
     			},
 				scales: {
+					yAxes: [{
+					    scaleLabel: {
+					        display: true,
+					        labelString: 'Sentiment Stock'
+					    }
+					}],
 					xAxes: [{
 						time: {
 							unit: 'month'
@@ -93,6 +99,10 @@ $.ajax({
 				}]
 			},
 			options: {
+				title: {
+            		display: true,
+            		text: 'Daily Sentiment'
+        		},
 				animation: false,
 				tooltips: {
         			enabled: false
@@ -160,21 +170,29 @@ $.ajax({
 
 <body>
 	<div class="row">
-		<div name='username' class="col-sm-3">
-			{{ username }}
+		<div name='username' class="col-sm-6">
+			<h6>Tweet Analysis for: {{ username }}</h6>
 		</div>
-		<div class="col-sm-3">
-			Positive Tweets: {{ positives }}
+		<div class="col-sm-6 justify-content-right">
+			<form action="{% url 'analysis' %}">
+				<div class="row">
+					<h6>Start Date: </h6>
+					<textarea name="date_start" id="" cols="10" rows="1">ex: 1/1/17</textarea>
+					<br>
+					<h6>End Date: </h6>
+					<textarea name="date_end" id="" cols="10" rows="1">ex: 2/1/17</textarea>
+					<button class="btn btn-default" type="submit" name="button"> Analyze </button>
+				</div>	
+			</form>
+			
 		</div>
-		<div class="col-sm-3">
-			Neutral Tweets: {{ neutrals }}
+		<div>
+
 		</div>
-		<div class="col-sm-3">
-			Negative Tweets: {{ negatives }}
-		</div>
+
+
 	</div>
 
-	<br>
 	<br>
 	
 	<div class="row" >
@@ -190,94 +208,92 @@ $.ajax({
 	</div>
 
 
-<div class="row justify-content-center" >
-	<div class="col-lg-10">
-		<div class="row">
-			<div class="col-sm-6">
-				<h2>TWEETS</h2>
-				{% for key, value in tweets.items %}
+<div class="row">
+	<div class="col-sm-6">
+		<h2>TWEETS</h2>
+		{% for key, value in tweets.items %}
 
-				<div class="col-sm-12" id="tweet" style="border: 1px solid black">
+		<div class="col-sm-12" id="tweet" style="border: 1px solid black">
+			<div class="row">
+
+				<div class="col-sm-11">
+
+					<h6>{{ value.3 }} @{{ value.4 }}</h6>
+
+				<div class="row">
+					<div class="col-sm-1">
+						<img src={{ value.5 }} alt="">
+					</div> 
+					<div class="col-sm-10">
+						<p>{{key}}</p>
+					</div>
+				</div>
 					<div class="row">
-
-						<div class="col-sm-11">
-
-							<h6>{{ value.3 }} @{{ value.4 }}</h6>
-
-						<div class="row">
-							<div class="col-sm-1">
-								<img src={{ value.5 }} alt="">
-							</div> 
-							<div class="col-sm-10">
-								<p>{{key}}</p>
-							</div>
-						</div>
-							<div class="row">
-								<div class="col-sm-6">
-									<h6>Retweets: {{ value.1 }}   Favorites: {{ value.2 }}</h6>
-								</div>
-							</div>
-						</div>
-						<div class="col-sm-1">
-							<br>
-							<br>
-							<h6>{{ value.0 }}</h6>
+						<div class="col-sm-10">
+							<h6>Retweets: {{ value.1 }}   Favorites: {{ value.2 }}    Date: {{ value.6 }}</h6>
 						</div>
 					</div>
 				</div>
-				<br/>
-
-				{% endfor %}
-
-			</div>
-
-
-			<div class="col-lg-6">
-				<h2>LIKES</h2>
-				{% for key, value in likes.items %}
-
-				<div class="col-sm-12 col-sm-offset-4" id="tweet" style="border: 1px solid black">
-					<div class="row">
-
-						<div class="col-sm-11">
-
-							<h6>{{ value.3 }} @{{ value.4 }}</h6>
-							
-
-
-							<div class="row">
-								<div class="col-sm-1">
-									<img src={{ value.5 }} alt="">
-								</div> 
-								<div class="col-sm-10">
-									<h6>{{key}}</h6>
-								</div>
-							</div>
-								<div class="row">
-									<div class="col-sm-6">
-										<h6>Retweets: {{ value.1 }}   Favorites: {{ value.2 }}</h6>
-									</div>
-								</div>
-							</div>
-						<div class="col-sm-1">
-							<br>
-							<br>
-							<h6>{{ value.0 }}</h6>
-						</div>
-					</div>
+				<div class="col-sm-1">
+					<br>
+					<br>
+					<h6>{{ value.0 }}</h6>
 				</div>
-				<br/>
-
-				{% endfor %}
-				<br/>		
-				
 			</div>
 		</div>
+		<br/>
+
+		{% endfor %}
+
+	</div>
+
+
+	<div class="col-lg-6">
+		<h2>LIKES</h2>
+		{% for key, value in likes.items %}
+
+		<div class="col-sm-12 col-sm-offset-4" id="tweet" style="border: 1px solid black">
+			<div class="row">
+
+				<div class="col-sm-11">
+
+					<h6>{{ value.3 }} @{{ value.4 }}</h6>
+					
+
+
+					<div class="row">
+						<div class="col-sm-1">
+							<img src={{ value.5 }} alt="">
+						</div> 
+						<div class="col-sm-10">
+							<p>{{key}}</p>
+						</div>
+					</div>
+						<div class="row">
+							<div class="col-sm-10">
+								<h6>Retweets: {{ value.1 }}   Favorites: {{ value.2 }}    Date: {{value.6}}</h6>
+							</div>
+						</div>
+					</div>
+				<div class="col-sm-1">
+					<br>
+					<br>
+					<h6>{{ value.0 }}</h6>
+				</div>
+			</div>
+		</div>
+		<br/>
+
+		{% endfor %}
+		<br/>		
+		
 	</div>
 </div>
+
 </body>
 
 
 
 <a href="{% url 'home'%}">Start Again</a>
 </html>
+

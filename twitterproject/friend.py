@@ -21,23 +21,27 @@ class Friend:
 
 	def __init__(self, twitter_handle):
 		self.twitter_handle = twitter_handle
+		self.tweet_detail = {}
+		self.like_detail = {}
 
 	def getTweets(self):
 		tweet_dict = {}
-		timeline = api.user_timeline(screen_name = self.twitter_handle, count = 25, include_rts = False)
+		timeline = api.user_timeline(screen_name = self.twitter_handle, count = 25, include_rts = True)
 		for tweet in timeline:
 			if tweet.text[0] == "@":
-				#exclude tweets from the latest 10 tweets part
+				#exclude tweets from the latest tweets part
 				pass
 			else:
-				#{tweet.text: [tweet sentiment, retweets, favorites, name, twitter handle, profile image] }
+				tweet_date = tweet.created_at.strftime('%m/%d/%y')
+				#{tweet.text: [tweet sentiment, retweets, favorites, name, twitter handle, profile image, date] }
 				tweet_dict[tweet.text] = []
 				tweet_dict[tweet.text].append(round(TextBlob(tweet.text).sentiment.polarity,2))
 				tweet_dict[tweet.text].append(tweet.retweet_count)
 				tweet_dict[tweet.text].append(tweet.favorite_count)
 				tweet_dict[tweet.text].append(tweet.user.name) 
 				tweet_dict[tweet.text].append(tweet.user.screen_name)
-				tweet_dict[tweet.text].append(tweet.user.profile_image_url_https) 
+				tweet_dict[tweet.text].append(tweet.user.profile_image_url_https)
+				tweet_dict[tweet.text].append(tweet_date) 
 
 
 		#only return latest 10 tweets
@@ -59,14 +63,16 @@ class Friend:
 		# likes_list_trim = likes_list[:10]
 
 		for like in likes_per_page:
-			#{like.text: [like sentiment, retweets, favorites, name, twitter handle, profile image] }
+			like_date = like.created_at.strftime('%m/%d/%y')
+			#{like.text: [like sentiment, retweets, favorites, name, twitter handle, profile image, date] }
 			likes_dict[like.text] = []
 			likes_dict[like.text].append(round(TextBlob(like.text).sentiment.polarity,2))
 			likes_dict[like.text].append(like.retweet_count)
 			likes_dict[like.text].append(like.favorite_count)
 			likes_dict[like.text].append(like.user.name) 
 			likes_dict[like.text].append(like.user.screen_name)
-			likes_dict[like.text].append(like.user.profile_image_url_https) 
+			likes_dict[like.text].append(like.user.profile_image_url_https)
+			likes_dict[like.text].append(like_date)
 
 		return likes_dict
 
@@ -120,8 +126,44 @@ class Friend:
 		    pages_of_likes.append(likes_per_page)
 
 		first_like = likes_per_page[0].created_at.strftime('%m/%d/%y')
-		print(first_like)
-		print("HFHFH")
+
+		## getting tweet detail into a dictionary to push to analysis tab
+
+		tweet_detail_dict = {}
+
+		for tweet in timeline:
+			tweet_date = tweet.created_at.strftime('%m/%d/%y')
+			#{tweet.text: [tweet sentiment, retweets, favorites, name, twitter handle, profile image, date] }
+			tweet_detail_dict[tweet.text] = []
+			tweet_detail_dict[tweet.text].append(round(TextBlob(tweet.text).sentiment.polarity,2))
+			tweet_detail_dict[tweet.text].append(tweet.retweet_count)
+			tweet_detail_dict[tweet.text].append(tweet.favorite_count)
+			tweet_detail_dict[tweet.text].append(tweet.user.name) 
+			tweet_detail_dict[tweet.text].append(tweet.user.screen_name)
+			tweet_detail_dict[tweet.text].append(tweet.user.profile_image_url_https)
+			tweet_detail_dict[tweet.text].append(tweet_date) 			
+
+		#this goes to return
+		self.tweet_detail = tweet_detail_dict
+
+		like_detail = {}
+
+
+		for like in likes_per_page:
+			like_date = like.created_at.strftime('%m/%d/%y')
+			#{like.text: [like sentiment, retweets, favorites, name, twitter handle, profile image, date] }
+			like_detail[like.text] = []
+			like_detail[like.text].append(round(TextBlob(like.text).sentiment.polarity,2))
+			like_detail[like.text].append(like.retweet_count)
+			like_detail[like.text].append(like.favorite_count)
+			like_detail[like.text].append(like.user.name) 
+			like_detail[like.text].append(like.user.screen_name)
+			like_detail[like.text].append(like.user.profile_image_url_https)
+			like_detail[like.text].append(like_date)
+
+		self.like_detail = like_detail
+
+		### Getting tweet detail and sentiment into dictionaries
 
 		tweets = {}
 		retweets = {}
@@ -189,7 +231,7 @@ class Friend:
 		#starting Like data collection
 		likes = {}
 		like_ids = {}   #date: ID
-		like_detail = {}   #ID: Text
+		like_detail_dict = {}   #ID: Text
 		like_sentiment = {} #date: sentiment
 
 		#this is to create the like_ids for each tweet
@@ -207,9 +249,9 @@ class Friend:
 		    for like in page:
 		        like_id = like.id
 		        if like_id in like_detail:
-		            like_detail[like_id] = like.text
+		            like_detail_dict[like_id] = like.text
 		        else:     
-		            like_detail[like_id] = like.text
+		            like_detail_dict[like_id] = like.text
 
 		            
 		            
@@ -223,7 +265,7 @@ class Friend:
 		        else:
 		            like_sentiment[date] = TextBlob(like.text).sentiment.polarity
 
-		#creating dataframe of sentiment
+		#creating dataframe of sentiment - NO TEXT
 		like_sentiment_df = pd.DataFrame.from_dict(like_sentiment, orient='index')
 		like_sentiment_df.columns = ['like_sentiment']
 		like_sentiment_df['date'] = like_sentiment_df.index
@@ -260,8 +302,8 @@ class Friend:
 		#getting graph to scale correctly with the amount of data we have
 		#variable from pulling the likes above
 		self.likes_dates = self.dates[self.dates.index(first_like):]
-		print(len(self.likes_dates))
-		print(len(self.dates))
-		print(len(self.like_ma))
 
-		return self.dates, self.tweet_stock, self.tweet_ma, self.daily_tweet_sentiment, self.daily_like_sentiment, self.like_stock, self.like_ma, self.likes_dates
+		#assigning dataframe to friend for analysis page
+		self.friend_df = sentiment_df
+
+		return self.dates, self.tweet_stock, self.tweet_ma, self.daily_tweet_sentiment, self.daily_like_sentiment, self.like_stock, self.like_ma, self.likes_dates, self.tweet_detail, self.like_detail

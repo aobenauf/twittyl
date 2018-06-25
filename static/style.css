@@ -4,5 +4,10 @@ body {
     height: 100%;
 }
 
+textarea {
+  resize: none;
+  overflow:hidden
+}
+
 
 

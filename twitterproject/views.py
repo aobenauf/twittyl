@@ -21,13 +21,15 @@ def tweets(request):
 	buddy_name = person
 	#print(buddy_name.twitter_handle)
 
-	return render(request, 'tweets.html',{'username':person.twitter_handle,'tweets': tweets, 'likes': likes, 'positives': pos_sent,'negatives': neg_sent, 'neutrals': nut_sent})
+	return render(request, 'tweets.html',{'username':person.twitter_handle,'tweets': tweets, 'likes': likes}) #, 'positives': pos_sent,'negatives': neg_sent, 'neutrals': nut_sent
 
 
 def analysis(request):
-	# Send buffer in a http response the the browser with the mime type image/png set
-	#picture = HttpResponse(buffer.getvalue(), content_type="image/png")
-	return render(request, 'analysis.html')
+	#analysis_df = person.friend_df
+	tweet_detail_dict = person.tweet_detail
+	like_detail_dict = person.like_detail
+
+	return render(request, 'analysis.html', {'tweets': tweet_detail_dict, 'likes': like_detail_dict})
 
 
 class ChartData(APIView):
@@ -38,7 +40,9 @@ class ChartData(APIView):
 	def get(self, request, format=None):
 		#pulling twitter handle that was pulled in "tweets" pull request and stored in the Friend class init 'person'
 		buddy = friend.Friend(person.twitter_handle)
-		dates, tweet_stock_data, tweet_ma_data, daily_tweet_sentiment, daily_like_sentiment, like_stock, like_ma, likes_dates = buddy.getSentimentStock()
+		dates, tweet_stock_data, tweet_ma_data, daily_tweet_sentiment, daily_like_sentiment, like_stock, like_ma, likes_dates, tweet_detail, like_detail = buddy.getSentimentStock()
+		person.tweet_detail = tweet_detail
+		person.like_detail = like_detail
 		#print(len(dates),len(tweet_stock_data),len(tweet_ma_data))
 		data = {
 			"labels": dates,
@@ -50,5 +54,4 @@ class ChartData(APIView):
 			"like_ma": like_ma,
 			"likes_dates": likes_dates
 		}
-		print(data["likes_dates"])
 		return Response(data)
