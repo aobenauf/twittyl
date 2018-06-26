@@ -4,6 +4,8 @@ from django.http import JsonResponse
 from . import friend
 from rest_framework.views import APIView
 from rest_framework.response import Response
+import datetime as dt
+import pandas as pd
 
 #initialize a friend with no twitter handle at first
 person = friend.Friend("")
@@ -29,7 +31,14 @@ def analysis(request):
 	tweet_detail_dict = person.tweet_detail
 	like_detail_dict = person.like_detail
 
-	return render(request, 'analysis.html', {'tweets': tweet_detail_dict, 'likes': like_detail_dict})
+	start_date = dt.datetime.strptime('6/14/18', '%m/%d/%y')
+	end_date = dt.datetime.strptime('6/22/18', '%m/%d/%y')
+
+	#filter the tweets on a date window
+	new_tweets = filter_dicts(tweet_detail_dict, start_date, end_date)
+	new_likes = filter_dicts(like_detail_dict, start_date, end_date)
+
+	return render(request, 'analysis.html', {'tweets': new_tweets, 'likes': new_likes})
 
 
 class ChartData(APIView):
@@ -55,3 +64,30 @@ class ChartData(APIView):
 			"likes_dates": likes_dates
 		}
 		return Response(data)
+
+def filter_dicts(dictionary_of_tweets, start_date, end_date):
+
+	df= pd.DataFrame.from_dict(dictionary_of_tweets,orient='index')
+	df.columns= ['sentiment', 'retweets', 'favorites', 'name', 'twitter_handle', 'profile_image', 'date']
+	df['tweet_text'] = df.index
+	df_2 = df.set_index(pd.DatetimeIndex(df['date'])).sort_index(ascending=True)
+
+
+	mask = (df_2.index > start_date) & (df_2.index <= end_date)
+	df_3 = df_2.loc[mask]
+
+	print('Original Data: ' + str(len(df_2)))
+	print('Filtered Data: ' + str(len(df_3)))
+
+	filtered_tweet_dict = {}
+	#load data back into dictionaries
+	for index, row in df_3.iterrows():
+	    filtered_tweet_dict[row['tweet_text']] = row['sentiment']
+	    filtered_tweet_dict[row['tweet_text']] = row['retweets']
+	    filtered_tweet_dict[row['tweet_text']] = row['favorites']
+	    filtered_tweet_dict[row['tweet_text']] = row['name']
+	    filtered_tweet_dict[row['tweet_text']] = row['twitter_handle']
+	    filtered_tweet_dict[row['tweet_text']] = row['profile_image']
+	    filtered_tweet_dict[row['tweet_text']] = row['date']
+
+	return filtered_tweet_dict

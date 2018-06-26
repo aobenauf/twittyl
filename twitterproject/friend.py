@@ -307,3 +307,31 @@ class Friend:
 		self.friend_df = sentiment_df
 
 		return self.dates, self.tweet_stock, self.tweet_ma, self.daily_tweet_sentiment, self.daily_like_sentiment, self.like_stock, self.like_ma, self.likes_dates, self.tweet_detail, self.like_detail
+
+
+	def filter_dicts(dictionary_of_tweets, start_date, end_date):
+
+		df= pd.DataFrame.from_dict(dictionary_of_tweets,orient='index')
+		df.columns= ['sentiment', 'retweets', 'favorites', 'name', 'twitter_handle', 'profile_image', 'date']
+		df['tweet_text'] = df.index
+		df_2 = df.set_index(pd.DatetimeIndex(df['date'])).sort_index(ascending=True)
+
+
+		mask = (df_2.index > start_date) & (df_2.index <= end_date)
+		df_3 = df_2.loc[mask]
+
+		print('Original Data: ' + str(len(df_2)))
+		print('Filtered Data: ' + str(len(df_3)))
+
+		filtered_tweet_dict = {}
+		#load data back into dictionaries
+		for index, row in df_3.iterrows():
+		    filtered_tweet_dict[row['tweet_text']] = row['sentiment']
+		    filtered_tweet_dict[row['tweet_text']] = row['retweets']
+		    filtered_tweet_dict[row['tweet_text']] = row['favorites']
+		    filtered_tweet_dict[row['tweet_text']] = row['name']
+		    filtered_tweet_dict[row['tweet_text']] = row['twitter_handle']
+		    filtered_tweet_dict[row['tweet_text']] = row['profile_image']
+		    filtered_tweet_dict[row['tweet_text']] = row['date']
+
+		return filtered_tweet_dict
