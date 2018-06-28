@@ -9,6 +9,8 @@ import pandas as pd
 
 #initialize a friend with no twitter handle at first
 person = friend.Friend("")
+person.tweet_detail = {}
+person.like_detail = {}
 
 def home(request):
 	#refresh the user and data?
@@ -27,16 +29,22 @@ def tweets(request):
 
 
 def analysis(request):
-	#analysis_df = person.friend_df
+	#this first two lines assigns it to the intialized friend so you can go back and change the date and reload the data
+	person.tweet_detail = person.tweet_detail
+	person.like_detail = person.like_detail
+	#this section is used to be passed to the functions to filter the data down, this is from the original getSentimentStock function to limit the API pulls
 	tweet_detail_dict = person.tweet_detail
 	like_detail_dict = person.like_detail
+	print(like_detail_dict)
 
-	start_date = dt.datetime.strptime('6/14/18', '%m/%d/%y')
-	end_date = dt.datetime.strptime('6/22/18', '%m/%d/%y')
+	start_date = dt.datetime.strptime('05/01/18', '%m/%d/%y') #can't do 2018, needs to be /18
+	end_date = dt.datetime.strptime('06/22/18', '%m/%d/%y')
 
 	#filter the tweets on a date window
 	new_tweets = filter_dicts(tweet_detail_dict, start_date, end_date)
 	new_likes = filter_dicts(like_detail_dict, start_date, end_date)
+
+
 
 	return render(request, 'analysis.html', {'tweets': new_tweets, 'likes': new_likes})
 
@@ -82,12 +90,13 @@ def filter_dicts(dictionary_of_tweets, start_date, end_date):
 	filtered_tweet_dict = {}
 	#load data back into dictionaries
 	for index, row in df_3.iterrows():
-	    filtered_tweet_dict[row['tweet_text']] = row['sentiment']
-	    filtered_tweet_dict[row['tweet_text']] = row['retweets']
-	    filtered_tweet_dict[row['tweet_text']] = row['favorites']
-	    filtered_tweet_dict[row['tweet_text']] = row['name']
-	    filtered_tweet_dict[row['tweet_text']] = row['twitter_handle']
-	    filtered_tweet_dict[row['tweet_text']] = row['profile_image']
-	    filtered_tweet_dict[row['tweet_text']] = row['date']
+		filtered_tweet_dict[row['tweet_text']] = []
+		filtered_tweet_dict[row['tweet_text']].append(row['sentiment'])
+		filtered_tweet_dict[row['tweet_text']].append(row['retweets'])
+		filtered_tweet_dict[row['tweet_text']].append(row['favorites'])
+		filtered_tweet_dict[row['tweet_text']].append(row['name'])
+		filtered_tweet_dict[row['tweet_text']].append(row['twitter_handle'])
+		filtered_tweet_dict[row['tweet_text']].append(row['profile_image'])
+		filtered_tweet_dict[row['tweet_text']].append(row['date'])
 
 	return filtered_tweet_dict
