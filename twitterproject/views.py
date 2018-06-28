@@ -29,16 +29,20 @@ def tweets(request):
 
 
 def analysis(request):
+
+	#getting twitter right
+	date1 = str(request.GET['date_start'])
+	date2 = str(request.GET['date_end'])
+
 	#this first two lines assigns it to the intialized friend so you can go back and change the date and reload the data
 	person.tweet_detail = person.tweet_detail
 	person.like_detail = person.like_detail
 	#this section is used to be passed to the functions to filter the data down, this is from the original getSentimentStock function to limit the API pulls
 	tweet_detail_dict = person.tweet_detail
 	like_detail_dict = person.like_detail
-	print(like_detail_dict)
 
-	start_date = dt.datetime.strptime('05/01/18', '%m/%d/%y') #can't do 2018, needs to be /18
-	end_date = dt.datetime.strptime('06/22/18', '%m/%d/%y')
+	start_date = dt.datetime.strptime(date1, '%m/%d/%y') #can't do 2018, needs to be /18
+	end_date = dt.datetime.strptime(date2, '%m/%d/%y')
 
 	#filter the tweets on a date window
 	new_tweets = filter_dicts(tweet_detail_dict, start_date, end_date)
@@ -81,11 +85,8 @@ def filter_dicts(dictionary_of_tweets, start_date, end_date):
 	df_2 = df.set_index(pd.DatetimeIndex(df['date'])).sort_index(ascending=True)
 
 
-	mask = (df_2.index > start_date) & (df_2.index <= end_date)
+	mask = (df_2.index >= start_date) & (df_2.index <= end_date)
 	df_3 = df_2.loc[mask]
-
-	print('Original Data: ' + str(len(df_2)))
-	print('Filtered Data: ' + str(len(df_3)))
 
 	filtered_tweet_dict = {}
 	#load data back into dictionaries
