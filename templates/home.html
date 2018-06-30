@@ -22,29 +22,34 @@
 	<div class="container text-center">
 		<h1>BFB</h1>
 			
-		<h2>BETTER FRIEND BUREAU</h2>	
+		<h2>
+			<strong>BETTER FRIEND BUREAU</strong>
+		</h2>	
 
 
-		<p>BETA</p>
+		<p class="font-italic">BETA</p>
 	</div>
 </div>
-
+	
 	<br>
+	<div class="container text-center">
+
+		<h5>See what the mood of your friend's tweets are!</h5>	
+	</div>
 	<br>
 	<br>
 
 <div class="jumbrotron">
 	<div class="container text-center">
 		<form action="{% url 'tweets' %}">
-			<textarea name="twitter_handle" id="" cols="20" rows="1" placeholder="Enter Twitter Handle" onkeydown="if (event.keyCode == 13) { this.form.submit(); return false; }"></textarea>
-			<br>
-			<button class="btn btn-default" type="submit" name="button"> Go! </button>
-			<br>
-			<br>
-			<div class="container text-center">
-
-				<h5>See what the mood of your friend's tweets are!</h5>	
+			<div class="row">
+				<h3 class="col-md-3 text-right" style="font-size: 60px;">@</h3>
+				<textarea style="font-size: 58px;" class="col-md-6" name="twitter_handle" id="" cols="15" rows="1" placeholder="Enter Twitter Handle" onkeydown="if (event.keyCode == 13) { this.form.submit(); return false; }"></textarea>
 			</div>
+			<br>
+			<button class="btn btn-lg" type="submit" name="button"> Analyze! </button>
+			<br>
+
 		</form>		
 	</div>
 </div>
@@ -53,15 +58,15 @@
 <br>
 <br>
 
-<div class="jumbrotron">
 
-	<div class="container text-center">
 
-		<br>
-		<br>
-		<br>
-		<h6>What We Are Trying To Do</h6>
-		<p>If you notice a friend mood is down, reach out - see if they are doing alright. If this website can make one person feel less lonely on a bad day I will consider it a success.</p>
+	<div id='homenote' class="text-center">
+
+		<h6> <strong>What We Are Trying To Do</strong> </h6>
+
+		<div class="text-center">
+		  <h7 style="width: 30%; display: inline-block;">If you notice a friend's mood is down, reach out - see if they are doing alright. If this website can make even one person feel less lonely on a bad day we will consider it a success.</h7>
+		</div>
 
 	</div>
 
@@ -69,10 +74,12 @@
 	<br>
 	<br>
 	<br>
-	<div class="container text-center">
-		Note: This software isn't perfect and doesn't define your actual mood, and if someone is on private we will not have access to their tweets
+	<br>
+	<br>
+	<div class="text-center font-italic">
+		<p>Note: This software isn't perfect and doesn't define your actual mood, and if someone is on private we will not have access to their tweets.</p>
 	</div>
-</div>
+
 
 
 </body>
