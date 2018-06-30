@@ -180,12 +180,12 @@ $.ajax({
 			<form action="{% url 'analysis' %}">
 				
 				<div class="row">
-					<h6>Start Date: </h6>
+					<h6 style="padding-right: 10px;">Start Date: </h6>
 					<textarea name="date_start" id="" cols="10" rows="1" placeholder="ex: 1/1/17"></textarea>
 					<br>
-					<h6>End Date: </h6>
+					<h6 style="padding-right: 10px; padding-left: 10px;">End Date: </h6>
 					<textarea name="date_end" id="" cols="10" rows="1" placeholder="ex: 2/1/17"></textarea>
-					<button class="btn btn-default" type="submit" name="button"> Analyze </button>
+					<button style="padding-left: 10px;" class="btn btn-default" type="submit" name="button"> Analyze </button>
 				</div>	
 			</form>
 			
@@ -211,86 +211,93 @@ $.ajax({
 		</div>
 	</div>
 
+<div class="row justify-content-center" >
+	<div class="col-lg-10">
+		<div class="row">
+			<div class="col-sm-6">
+				<h2>TWEETS</h2>
+				{% for key, value in tweets.items %}
 
-<div class="row">
-	<div class="col-sm-6">
-		<h2>TWEETS</h2>
-		{% for key, value in tweets.items %}
-
-		<div class="col-sm-12" id="tweet" style="border: 1px solid black">
-			<div class="row">
-
-				<div class="col-sm-11">
-
-					<h6>{{ value.3 }} @{{ value.4 }}</h6>
-
-				<div class="row">
-					<div class="col-sm-1">
-						<img src={{ value.5 }} alt="">
-					</div> 
-					<div class="col-sm-10">
-						<p>{{key}}</p>
-					</div>
-				</div>
+				<div class="col-sm-12" id="tweet" style="border: 1px solid black">
 					<div class="row">
+
 						<div class="col-sm-10">
-							<h6>Retweets: {{ value.1 }}   Favorites: {{ value.2 }}    Date: {{ value.6 }}</h6>
+
+							<h6>{{ value.3 }} @{{ value.4 }}</h6>
+
+							<div class="row">
+								<div class="col-sm-1">
+									<img src={{ value.5 }} alt="" style="padding-right: 10px;">
+								</div> 
+								<div class="col-sm-11">
+									<p style="padding-left: 15px;">{{key}}</p>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-11">
+									<h6>Retweets: {{ value.1 }}   Favorites: {{ value.2 }}    Date: {{ value.6 }}</h6>
+								</div>
+							</div>
 						</div>
-					</div>
-				</div>
-				<div class="col-sm-1">
-					<br>
-					<br>
-					<h6>{{ value.0 }}</h6>
-				</div>
-			</div>
-		</div>
-		<br/>
-
-		{% endfor %}
-
-	</div>
-
-
-	<div class="col-lg-6">
-		<h2>LIKES</h2>
-		{% for key, value in likes.items %}
-
-		<div class="col-sm-12 col-sm-offset-4" id="tweet" style="border: 1px solid black">
-			<div class="row">
-
-				<div class="col-sm-11">
-
-					<h6>{{ value.3 }} @{{ value.4 }}</h6>
-					
-
-
-					<div class="row">
-						<div class="col-sm-1">
-							<img src={{ value.5 }} alt="">
-						</div> 
-						<div class="col-sm-10">
-							<p>{{key}}</p>
-						</div>
-					</div>
-						<div class="row">
-							<div class="col-sm-10">
-								<h6>Retweets: {{ value.1 }}   Favorites: {{ value.2 }}    Date: {{value.6}}</h6>
+						<div class="col-sm-2" id="sentiment">
+							<div class="text-center">
+								<br>
+								<br>
+								<br>
+								<h6 style="font-size: 20px;">{{ value.0 }}</h6>
 							</div>
 						</div>
 					</div>
-				<div class="col-sm-1">
-					<br>
-					<br>
-					<h6>{{ value.0 }}</h6>
 				</div>
+				<br/>
+
+				{% endfor %}
+
+			</div>
+
+
+			<div class="col-lg-6">
+				<h2>LIKES</h2>
+				{% for key, value in likes.items %}
+
+				<div class="col-sm-12" id="tweet" style="border: 1px solid black">
+					<div class="row">
+
+						<div class="col-sm-10">
+
+							<h6>{{ value.3 }} @{{ value.4 }}</h6>
+
+							<div class="row">
+								<div class="col-sm-1">
+									<img src={{ value.5 }} alt="" style="padding-right: 10px;">
+								</div> 
+								<div class="col-sm-11">
+									<p style="padding-left: 15px;">{{key}}</p>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-11">
+									<h6>Retweets: {{ value.1 }}   Favorites: {{ value.2 }}    Date: {{ value.6 }}</h6>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-2" id="sentiment">
+							<div class="text-center">
+								<br>
+								<br>
+								<br>
+								<h6 style="font-size: 20px;">{{ value.0 }}</h6>
+							</div>
+						</div>
+					</div>
+				</div>
+				<br/>
+
+				{% endfor %}
+				<br/>		
+				
 			</div>
 		</div>
-		<br/>
-
-		{% endfor %}
-		<br/>		
-		
 	</div>
 </div>
 
