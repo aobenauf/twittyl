@@ -218,10 +218,10 @@ $.ajax({
 				<h2>TWEETS</h2>
 				{% for key, value in tweets.items %}
 
-				<div class="col-sm-12" id="tweet" style="border: 1px solid black">
+				<div class="col-sm-12" id="tweet">
 					<div class="row">
 
-						<div class="col-sm-10">
+						<div class="col-sm-10" style="border: 1px solid black">
 
 							<h6>{{ value.3 }} @{{ value.4 }}</h6>
 
@@ -260,10 +260,10 @@ $.ajax({
 				<h2>LIKES</h2>
 				{% for key, value in likes.items %}
 
-				<div class="col-sm-12" id="tweet" style="border: 1px solid black">
+				<div class="col-sm-12" id="tweet">
 					<div class="row">
 
-						<div class="col-sm-10">
+						<div class="col-sm-10" style="border: 1px solid black">
 
 							<h6>{{ value.3 }} @{{ value.4 }}</h6>
 
